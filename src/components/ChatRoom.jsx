@@ -212,11 +212,12 @@ export default function ChatRoom() {
     }
   };
 
-  const copyCode = () => {
+  const copyRoomCode = () => {
     navigator.clipboard.writeText(code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
 
   if (!roomData) return null;
 

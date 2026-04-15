@@ -103,7 +103,19 @@ export default function Dashboard() {
         </button>
       </motion.div>
 
+      {error && (
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-full max-w-4xl bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-2xl flex items-center gap-3 mb-8"
+        >
+          <X className="w-5 h-5 cursor-pointer" onClick={() => setError('')} />
+          <span className="text-sm font-medium">{error}</span>
+        </motion.div>
+      )}
+
       {/* Main Grid */}
+
       <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         {/* Create Room Box */}
         <motion.div 
@@ -130,7 +142,7 @@ export default function Dashboard() {
               className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-primary-500/30 transition-all"
             />
             <button
-              onClick={createRoom}
+              onClick={handleCreateRoom}
               className="w-full py-4 bg-primary-600 hover:bg-primary-500 rounded-2xl font-bold text-white transition-all shadow-xl shadow-primary-900/20 active:scale-95 flex items-center justify-center gap-2"
             >
               Start Chatting
@@ -163,7 +175,7 @@ export default function Dashboard() {
               className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all text-center font-mono tracking-widest text-lg"
             />
             <button
-              onClick={joinRoom}
+              onClick={handleJoinRoom}
               className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 rounded-2xl font-bold text-white transition-all shadow-xl shadow-indigo-900/20 active:scale-95"
             >
               Enter Room
