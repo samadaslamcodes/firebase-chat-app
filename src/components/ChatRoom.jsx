@@ -221,109 +221,128 @@ export default function ChatRoom() {
   if (!roomData) return null;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 overflow-hidden">
-      <motion.main 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="glass-panel w-full max-w-3xl h-[90vh] md:h-[85vh] rounded-[2.5rem] overflow-hidden flex flex-col relative shadow-2xl"
-      >
-        {/* Header */}
-        <header className="px-6 py-5 border-b border-white/10 flex items-center justify-between bg-white/5 backdrop-blur-md">
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={() => navigate('/')}
-              className="p-2.5 rounded-2xl hover:bg-white/10 text-white/60 hover:text-white transition-all active:scale-90"
-            >
-              <ArrowLeft className="w-6 h-6" />
-            </button>
-            <div className="h-10 w-[1px] bg-white/10 mx-1"></div>
+    <div className="flex h-screen bg-[#020617] overflow-hidden">
+      {/* Sidebar - Desktop Only */}
+      <div className="hidden lg:flex w-80 bg-white/5 border-r border-white/10 flex-col backdrop-blur-xl">
+        <div className="p-8 border-b border-white/10">
+          <h1 className="text-2xl font-black text-white uppercase tracking-tighter">Elite Chat</h1>
+          <p className="text-sm text-white/30 mt-1">Status: Operational</p>
+        </div>
+        <div className="p-6">
+          <div className="flex items-center gap-3 mb-8 p-4 rounded-2xl bg-white/5 border border-white/5">
+            <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center font-bold text-white uppercase">
+              {roomData?.name?.charAt(0) || '#'}
+            </div>
             <div>
-              <h1 className="text-xl font-bold text-white leading-none mb-1">{roomData.name}</h1>
-              <div className="flex items-center gap-2">
-                <span className="flex h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
-                <p className="text-[11px] text-white/40 font-medium uppercase tracking-wider">
-                  Live Chat • {roomData.participants?.length || 1} Mates
-                </p>
-              </div>
+              <p className="text-xs text-white/30 uppercase font-black tracking-widest">Active Room</p>
+              <p className="text-white font-bold">{roomData?.name}</p>
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
-            <div 
-              onClick={copyCode}
-              className="px-4 py-2 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3 cursor-pointer hover:bg-white/10 transition-all select-none group"
+          <div className="space-y-4">
+             <div className="p-5 rounded-3xl bg-indigo-500/10 border border-indigo-500/20">
+                <p className="text-xs text-indigo-400 font-black uppercase mb-3 flex items-center gap-2">
+                  <Users className="w-4 h-4" /> Participants
+                </p>
+                <div className="flex -space-x-2">
+                   {[1,2,3].map(i => (
+                     <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0f111a] bg-white/10"></div>
+                   ))}
+                   <div className="w-8 h-8 rounded-full border-2 border-[#0f111a] bg-white/20 flex items-center justify-center text-[10px] font-bold">+12</div>
+                </div>
+             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Chat Area */}
+      <main className="flex-1 flex flex-col relative h-full">
+        {/* Header */}
+        <header className="px-4 py-3 sm:px-6 sm:py-5 border-b border-white/10 flex items-center justify-between bg-[#020617]/80 backdrop-blur-md sticky top-0 z-10 w-full">
+          <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+            <button 
+              onClick={() => navigate('/')}
+              className="p-2 sm:p-2.5 rounded-xl hover:bg-white/10 text-white/70 transition-all shrink-0"
             >
-              <div className="flex flex-col items-end">
-                <span className="text-[9px] text-white/30 uppercase font-bold tracking-tighter">Room Code</span>
-                <span className="text-sm font-bold text-primary-400 tracking-widest">{code}</span>
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <h2 className="text-base sm:text-lg font-bold text-white truncate">{roomData?.name}</h2>
+                <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
               </div>
-              {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-white/30 group-hover:text-white/60" />}
+              <p className="text-[10px] sm:text-xs text-white/30 font-medium uppercase tracking-widest">Live Chat • 1 Mates</p>
             </div>
+          </div>
+
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+            <button 
+              onClick={copyRoomCode}
+              className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group scale-90 sm:scale-100"
+            >
+              <div className="text-left hidden sm:block">
+                <p className="text-[10px] text-white/30 font-black uppercase tracking-tighter">Room Code</p>
+                <p className="text-sm font-bold text-indigo-400 font-mono">{code}</p>
+              </div>
+              <div className="sm:hidden text-[10px] font-bold text-indigo-400 font-mono mr-1">{code}</div>
+              {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />}
+            </button>
+            
+            <img 
+              src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.displayName}`} 
+              alt="User" 
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-primary-500/30 shrink-0"
+            />
           </div>
         </header>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 sm:space-y-8 scroll-smooth pb-24 md:pb-6">
           <AnimatePresence initial={false}>
-            {messages.map((msg) => {
-              const isMe = msg.senderUid === user.uid;
-              const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.senderName}`;
-
+            {messages.map((msg, index) => {
+              const isMe = msg.senderUid === user?.uid;
               return (
                 <motion.div
                   key={msg.id}
                   initial={{ opacity: 0, y: 10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  className={`flex ${isMe ? 'justify-end' : 'justify-start'} items-end gap-3 group`}
+                  className={`flex items-end gap-3 ${isMe ? 'flex-row-reverse' : 'flex-row'}`}
                 >
-                  {!isMe && (
-                    <img 
-                      src={avatarUrl} 
-                      alt="" 
-                      className="w-9 h-9 rounded-2xl bg-white/5 border border-white/10 shadow-lg shrink-0"
-                    />
-                  )}
-                  
-                  <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'} max-w-[75%]`}>
-                    {!isMe && (
-                      <span className="text-[10px] text-white/30 mb-1.5 ml-1 font-bold tracking-widest uppercase">
-                        {msg.senderName}
-                      </span>
-                    )}
-                    <div className={`px-5 py-3.5 rounded-[1.5rem] text-sm md:text-base leading-relaxed ${
+                  <img 
+                    src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.avatarSeed}`} 
+                    alt="avatar" 
+                    className="w-7 h-7 sm:w-9 sm:h-9 rounded-full border border-white/10 bg-white/5 mb-1 shrink-0"
+                  />
+                  <div className={`flex flex-col max-w-[85%] sm:max-w-[70%] ${isMe ? 'items-end' : 'items-start'}`}>
+                    <span className="text-[10px] sm:text-xs text-white/30 mb-1.5 px-1 font-bold tracking-tight uppercase">
+                      {isMe ? 'You' : msg.senderName}
+                    </span>
+                    <div className={`px-4 py-2.5 sm:px-5 sm:py-3.5 rounded-[1.2rem] sm:rounded-[1.5rem] text-sm md:text-base leading-relaxed ${
                       isMe 
                         ? 'bg-primary-600 text-white rounded-br-none shadow-xl shadow-primary-900/40 border border-primary-500/30' 
                         : 'bg-white/10 text-white/90 rounded-bl-none border border-white/5 backdrop-blur-sm'
-                    } ${msg.imageUrl || msg.audioUrl ? 'p-2' : ''}`}>
+                    } ${msg.imageUrl || msg.audioUrl ? 'p-1.5 sm:p-2' : ''}`}>
                       {msg.imageUrl ? (
                         <a href={msg.imageUrl} target="_blank" rel="noopener noreferrer">
                           <img 
                             src={msg.imageUrl} 
                             alt="Shared media" 
-                            className="max-w-[200px] sm:max-w-[250px] rounded-[1rem] object-cover hover:opacity-90 transition-opacity"
+                            className="max-w-full sm:max-w-[250px] rounded-[1rem] object-cover hover:opacity-90 transition-opacity"
                           />
                         </a>
                       ) : msg.audioUrl ? (
-                        <div className="flex flex-col gap-2 min-w-[200px]">
-                           <audio src={msg.audioUrl} controls className="h-10 w-full rounded-full bg-white/5" />
-                           <span className="text-[9px] uppercase font-bold text-white/30 ml-2">Voice Message</span>
+                        <div className="flex flex-col gap-2 min-w-[180px] sm:min-w-[200px]">
+                           <audio src={msg.audioUrl} controls className="h-9 sm:h-10 w-full rounded-full bg-white/5" />
+                           <span className="text-[8px] sm:text-[9px] uppercase font-bold text-white/30 ml-2">Voice Message</span>
                         </div>
                       ) : (
                         msg.text
                       )}
                     </div>
-                    <span className="text-[9px] text-white/20 mt-1.5 font-medium tracking-wide">
+                    <span className="text-[9px] text-white/20 mt-1.5 font-medium tracking-wide px-1">
                       {!msg.createdAt ? 'Transmitting...' : new Date(msg.createdAt.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
-
-                  {isMe && (
-                    <img 
-                      src={avatarUrl} 
-                      alt="" 
-                      className="w-9 h-9 rounded-2xl bg-white/5 border border-white/10 shadow-lg shrink-0"
-                    />
-                  )}
                 </motion.div>
               );
             })}
@@ -332,8 +351,8 @@ export default function ChatRoom() {
         </div>
 
         {/* Input */}
-        <form onSubmit={sendMessage} className="p-4 sm:p-6 bg-white/5 border-t border-white/10 backdrop-blur-md">
-          <div className="relative flex items-center gap-2 sm:gap-3">
+        <form onSubmit={sendMessage} className="p-3 sm:p-6 bg-[#020617]/90 border-t border-white/10 backdrop-blur-xl absolute bottom-0 left-0 right-0 z-20">
+          <div className="max-w-4xl mx-auto relative flex items-center gap-2 sm:gap-3">
             
             {/* Image Upload Button */}
             <input 
@@ -347,7 +366,7 @@ export default function ChatRoom() {
               type="button"
               disabled={isUploading}
               onClick={() => fileInputRef.current?.click()}
-              className="p-3 sm:p-4 rounded-2xl bg-white/5 hover:bg-white/10 text-white transition-all disabled:opacity-50 shrink-0 border border-white/5"
+              className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white/5 hover:bg-white/10 text-white transition-all disabled:opacity-50 shrink-0 border border-white/5"
             >
               {isUploading ? (
                 <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin text-primary-400" />
@@ -361,7 +380,7 @@ export default function ChatRoom() {
               type="button"
               disabled={isUploading}
               onClick={isRecording ? stopRecording : startRecording}
-              className={`p-3 sm:p-4 rounded-2xl transition-all flex items-center justify-center shrink-0 border border-white/5 shadow-lg ${
+              className={`p-2.5 sm:p-4 rounded-xl sm:rounded-2xl transition-all flex items-center justify-center shrink-0 border border-white/5 shadow-lg ${
                 isRecording 
                   ? 'bg-red-500/20 text-red-400 animate-pulse border-red-500/50' 
                   : 'bg-white/5 hover:bg-white/10 text-white'
@@ -376,22 +395,21 @@ export default function ChatRoom() {
                 disabled={isRecording}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder={isRecording ? "Recording your voice..." : "Write something cool..."}
-                className={`w-full bg-white/5 border border-white/10 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all text-sm md:text-base pr-10 sm:pr-12 ${isRecording ? 'animate-pulse text-red-400 placeholder:text-red-400/30' : ''}`}
+                placeholder={isRecording ? "Recording..." : "Message..."}
+                className={`w-full bg-white/5 border border-white/10 rounded-xl sm:rounded-2xl px-3 sm:px-6 py-2.5 sm:py-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-primary-500/30 transition-all text-sm md:text-base ${isRecording ? 'animate-pulse text-red-400 placeholder:text-red-400/30' : ''}`}
               />
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-primary-500/20 group-focus-within:bg-primary-500 transition-all shadow-[0_0_10px_rgba(139,92,246,0.5)] hidden sm:block"></div>
             </div>
             
             <button 
               type="submit"
               disabled={(!input.trim() && !isUploading) || isUploading}
-              className="p-3 sm:p-4 rounded-2xl bg-primary-600 hover:bg-primary-500 text-white transition-all disabled:opacity-30 disabled:scale-95 shadow-xl shadow-primary-600/30 active:scale-90 flex items-center justify-center shrink-0 group"
+              className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-primary-600 hover:bg-primary-500 text-white transition-all disabled:opacity-30 disabled:scale-95 shadow-xl shadow-primary-600/30 active:scale-90 flex items-center justify-center shrink-0 group"
             >
               <Send className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </button>
           </div>
         </form>
-      </motion.main>
+      </main>
     </div>
   );
 }
